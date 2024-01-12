@@ -1,0 +1,24 @@
+.workspace {
+    display: flex;
+    flex-direction: column;
+}
+
+.controls-container {
+    padding: 5px;
+}
+
+.preview-container {
+    padding: 10px;
+    background-color: lightgray;
+}
+
+.preview {
+    border: 2px solid black;
+    background-color: white;
+}
+
+// Layout
+.fill-space {
+    width: 100%;
+    height: 100%;
+}
