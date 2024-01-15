@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subscription, tap } from 'rxjs';
 
@@ -37,18 +37,20 @@ export class AppComponent implements OnInit, OnDestroy {
   public formGroup: FormGroup;
   private changesSub$!: Subscription;
 
-  private headerElement!: HTMLElement;
-  private headerTextElement!: HTMLElement;
-  private bodyContentElement!: HTMLElement;
-  private buttonElement!: HTMLElement;
+  @ViewChild('header', { static: true })
+  private headerElement!: ElementRef;
+  @ViewChild('headerText', { static: true })
+  private headerTextElement!: ElementRef;
+  @ViewChild('bodyContent', { static: true })
+  private bodyContentElement!: ElementRef;
+  @ViewChild('button', { static: true })
+  private buttonElement!: ElementRef;
 
   public get headerTextColorFormControl(): FormControl {
     return this.formGroup.get('headerTextColor') as FormControl;
   }
 
   constructor(fb: FormBuilder) {
-    this.initHtmlElements();
-
     this.formGroup = fb.group<PreviewConfigForm>({
       headerBackgroundColor: fb.control(defaultPreviewConfig.headerBackgroundColor),
       headerTextColor: fb.control(defaultPreviewConfig.headerTextColor),
@@ -59,7 +61,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
-    this.initHtmlElements();
     this.updatePreviewStyles(defaultPreviewConfig);
 
     this.changesSub$ = this.formGroup.valueChanges.pipe(
@@ -69,30 +70,23 @@ export class AppComponent implements OnInit, OnDestroy {
     ).subscribe();
   }
 
-  private initHtmlElements(): void {
-    this.headerElement = document.getElementById('header') as HTMLElement;
-    this.headerTextElement = document.getElementById('header-text') as HTMLElement;
-    this.bodyContentElement = document.getElementById('body-content') as HTMLElement;
-    this.buttonElement = document.getElementById('button') as HTMLElement;
-  }
-
   private updatePreviewStyles(previewConfig: PreviewConfig): void {
     if (previewConfig == null) return;
 
     if (this.headerElement) {
-      this.headerElement.style.backgroundColor = previewConfig.headerBackgroundColor;
+      this.headerElement.nativeElement.style.backgroundColor = previewConfig.headerBackgroundColor;
     }
     if (this.headerTextElement) {
-      this.headerTextElement.style.color = previewConfig.headerTextColor;
+      this.headerTextElement.nativeElement.style.color = previewConfig.headerTextColor;
     }
 
     if (this.bodyContentElement) {
-      this.bodyContentElement.style.backgroundColor = previewConfig.bodyBackgroundColor;
+      this.bodyContentElement.nativeElement.style.backgroundColor = previewConfig.bodyBackgroundColor;
     }
 
     if (this.buttonElement) {
-      this.buttonElement.style.backgroundColor = previewConfig.buttonBackgroundColor;
-      this.buttonElement.style.color = previewConfig.buttonTextColor;
+      this.buttonElement.nativeElement.style.backgroundColor = previewConfig.buttonBackgroundColor;
+      this.buttonElement.nativeElement.style.color = previewConfig.buttonTextColor;
     }
   }
 
