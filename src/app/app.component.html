@@ -4,13 +4,21 @@
     <!--Controls-->
     <div class="controls-container">
       <form [formGroup]="formGroup">
+        <!--Example for: https://www.npmjs.com/package/@angular-material-components/color-picker-->
         <div>
           <label>Header Background:</label>
-          <input type="text" formControlName='headerBackgroundColor'/>
+          <mat-form-field>
+            <input matInput [ngxMatColorPicker]="headerBackgroundPicker" formControlName="headerBackgroundColor">
+            <ngx-mat-color-toggle matSuffix [for]="headerBackgroundPicker"></ngx-mat-color-toggle>
+            <!--Currently getting an error about a missing "toHexString" function, using touch UI at least makes it immediately usable. Works well enough for demo purposes.-->
+            <ngx-mat-color-picker #headerBackgroundPicker [touchUi]="true"></ngx-mat-color-picker>
+          </mat-form-field>
         </div>
+        <!--Example for: https://ngx-colors.web.app/overview-->
         <div>
-          <label>Header Text:</label>
-          <input type="text" formControlName='headerTextColor'/>
+          <label>Header Text (currently only hooked up through bubble picker):</label>
+          <ngx-colors ngx-colors-trigger style="display: inline-block; margin:5px;" formControlName="headerTextColor"></ngx-colors>
+          <input matInput type="text" [value]="headerTextColorFormControl.value"/>
         </div>
         <div>
           <label>Body Background:</label>

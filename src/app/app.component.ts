@@ -42,15 +42,19 @@ export class AppComponent implements OnInit, OnDestroy {
   private bodyContentElement!: HTMLElement;
   private buttonElement!: HTMLElement;
 
+  public get headerTextColorFormControl(): FormControl {
+    return this.formGroup.get('headerTextColor') as FormControl;
+  }
+
   constructor(fb: FormBuilder) {
     this.initHtmlElements();
 
     this.formGroup = fb.group<PreviewConfigForm>({
-      headerBackgroundColor: fb.control(null),
-      headerTextColor: fb.control(null),
-      bodyBackgroundColor: fb.control(null),
-      buttonBackgroundColor: fb.control(null),
-      buttonTextColor: fb.control(null)
+      headerBackgroundColor: fb.control(defaultPreviewConfig.headerBackgroundColor),
+      headerTextColor: fb.control(defaultPreviewConfig.headerTextColor),
+      bodyBackgroundColor: fb.control(defaultPreviewConfig.bodyBackgroundColor),
+      buttonBackgroundColor: fb.control(defaultPreviewConfig.buttonBackgroundColor),
+      buttonTextColor: fb.control(defaultPreviewConfig.buttonTextColor)
     });
   }
 
