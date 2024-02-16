@@ -21,8 +21,8 @@
           <input matInput type="text" [value]="headerTextColorFormControl.value"/>
         </div>
         <div>
-          <label>Body Background:</label>
           <mat-form-field>
+            <mat-label>Body Background *</mat-label>
             <input matInput [ngxMatColorPicker]="bodyBackgroundPicker" formControlName="bodyBackgroundColor">
             <!-- <ngx-mat-color-toggle matPrefix [for]="bodyBackgroundPicker">
               <!--Custom icons are only supported in version 16.x+ :/--
