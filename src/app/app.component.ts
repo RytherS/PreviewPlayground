@@ -1,29 +1,30 @@
+import { Color, NgxMatColorPickerComponent } from '@angular-material-components/color-picker';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Subscription, tap } from 'rxjs';
 
 interface PreviewConfig {
-  headerBackgroundColor: string;
-  headerTextColor: string;
-  bodyBackgroundColor: string;
-  buttonBackgroundColor: string;
-  buttonTextColor: string;
+  headerBackgroundColor: Color;
+  headerTextColor: Color;
+  bodyBackgroundColor: Color;
+  buttonBackgroundColor: Color;
+  buttonTextColor: Color;
 }
 
 interface PreviewConfigForm {
-  headerBackgroundColor: FormControl<string | null>;
-  headerTextColor: FormControl<string | null>;
-  bodyBackgroundColor: FormControl<string | null>;
-  buttonBackgroundColor: FormControl<string | null>;
-  buttonTextColor: FormControl<string | null>;
+  headerBackgroundColor: FormControl<Color | null>;
+  headerTextColor: FormControl<Color | null>;
+  bodyBackgroundColor: FormControl<Color | null>;
+  buttonBackgroundColor: FormControl<Color | null>;
+  buttonTextColor: FormControl<Color | null>;
 }
 
 const defaultPreviewConfig: PreviewConfig = {
-  headerBackgroundColor: '#FFFFFF',
-  headerTextColor: '#000000',
-  bodyBackgroundColor: '#FFFFFF',
-  buttonBackgroundColor: '#AAAAAA',
-  buttonTextColor: '#000000'
+  headerBackgroundColor: new Color(255, 255, 255, 1),
+  headerTextColor: new Color(0, 0, 0, 1),
+  bodyBackgroundColor: new Color(255, 255, 255, 1),
+  buttonBackgroundColor: new Color(170, 170, 170, 1),
+  buttonTextColor: new Color(0, 0, 0, 1)
 }
 
 @Component({
@@ -45,6 +46,9 @@ export class AppComponent implements OnInit, OnDestroy {
   private bodyContentElement!: ElementRef;
   @ViewChild('button', { static: true })
   private buttonElement!: ElementRef;
+
+  @ViewChild('bodyBackgroundColorButton', { static: true })
+  private bodyBackgroundColorButton!: ElementRef;
 
   public get headerTextColorFormControl(): FormControl {
     return this.formGroup.get('headerTextColor') as FormControl;
@@ -74,19 +78,43 @@ export class AppComponent implements OnInit, OnDestroy {
     if (previewConfig == null) return;
 
     if (this.headerElement) {
-      this.headerElement.nativeElement.style.backgroundColor = previewConfig.headerBackgroundColor;
+      this.headerElement.nativeElement.style.backgroundColor = previewConfig.headerBackgroundColor.toHexString();
     }
     if (this.headerTextElement) {
-      this.headerTextElement.nativeElement.style.color = previewConfig.headerTextColor;
+      this.headerTextElement.nativeElement.style.color = previewConfig.headerTextColor.hex;
     }
 
-    if (this.bodyContentElement) {
-      this.bodyContentElement.nativeElement.style.backgroundColor = previewConfig.bodyBackgroundColor;
+    if (this.bodyContentElement && this.bodyBackgroundColorButton) {
+      this.bodyContentElement.nativeElement.style.backgroundColor = previewConfig.bodyBackgroundColor?.toHexString();
+      this.bodyBackgroundColorButton.nativeElement.style.backgroundColor = previewConfig.bodyBackgroundColor?.toHexString();
     }
 
     if (this.buttonElement) {
-      this.buttonElement.nativeElement.style.backgroundColor = previewConfig.buttonBackgroundColor;
-      this.buttonElement.nativeElement.style.color = previewConfig.buttonTextColor;
+      this.buttonElement.nativeElement.style.backgroundColor = previewConfig.buttonBackgroundColor.hex;
+      this.buttonElement.nativeElement.style.color = previewConfig.buttonTextColor.hex;
+    }
+  }
+
+  public openSwatch(colorPicker: NgxMatColorPickerComponent): void {
+    colorPicker.open();
+  }
+
+  public clearColor(controlName: string): void {
+    this.formGroup.get(controlName)?.patchValue(new Color(0, 0, 0, 1));
+  }
+
+  public logValues(): void {
+    console.log(this.getValues());
+  }
+
+  private getValues(): any {
+    const config = this.formGroup.value as PreviewConfig;
+    return {
+      headerBackgroundColor: config.headerBackgroundColor.hex,
+      headerTextColor: config.headerTextColor.hex,
+      bodyBackgroundColor: config.bodyBackgroundColor.hex,
+      buttonBackgroundColor: config.buttonBackgroundColor.hex,
+      buttonTextColor: config.buttonTextColor.hex
     }
   }
 

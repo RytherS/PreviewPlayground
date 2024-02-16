@@ -11,7 +11,7 @@
             <input matInput [ngxMatColorPicker]="headerBackgroundPicker" formControlName="headerBackgroundColor">
             <ngx-mat-color-toggle matSuffix [for]="headerBackgroundPicker"></ngx-mat-color-toggle>
             <!--Currently getting an error about a missing "toHexString" function, using touch UI at least makes it immediately usable. Works well enough for demo purposes.-->
-            <ngx-mat-color-picker #headerBackgroundPicker [touchUi]="true"></ngx-mat-color-picker>
+            <ngx-mat-color-picker #headerBackgroundPicker></ngx-mat-color-picker>
           </mat-form-field>
         </div>
         <!--Example for: https://ngx-colors.web.app/overview-->
@@ -22,7 +22,19 @@
         </div>
         <div>
           <label>Body Background:</label>
-          <input type="text" formControlName='bodyBackgroundColor'/>
+          <mat-form-field>
+            <input matInput [ngxMatColorPicker]="bodyBackgroundPicker" formControlName="bodyBackgroundColor">
+            <!-- <ngx-mat-color-toggle matPrefix [for]="bodyBackgroundPicker">
+              <!--Custom icons are only supported in version 16.x+ :/--
+              <mat-icon ngxMatColorpickerToggleIcon>home</mat-icon>
+            </ngx-mat-color-toggle> -->
+            <button #bodyBackgroundColorButton matPrefix (click)="openSwatch(bodyBackgroundPicker)" class="swatch-button"></button>
+            <button matSuffix mat-icon-button (click)="clearColor('bodyBackgroundColor')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <!--Currently getting an error about a missing "toHexString" function, using touch UI at least makes it immediately usable. Works well enough for demo purposes.-->
+            <ngx-mat-color-picker #bodyBackgroundPicker></ngx-mat-color-picker>
+          </mat-form-field>
         </div>
         <div>
           <label>Button Background:</label>
@@ -33,10 +45,12 @@
           <input type="text" formControlName='buttonTextColor'/>
         </div>
       </form>
+
+      <button (click)="logValues()">Log Values</button>
     </div>
 
     <!--Preview-->
-    <div class="preview-container">
+    <div class="preview-container fill-space">
       <div class="preview">
         <div #header>
           <h1 #headerText>Header</h1>
